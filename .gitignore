@@ -1,0 +1,48 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**
+!**/src/test/**
+node_modules
+node.exe
+dist
+node
+work/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea/*
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+
+### VS Code ###
+.vscode/
+
+
+### Unignore some IntelliJ things ###
+!/.idea/inspectionProfiles
+!/.idea/codeStyles
+!/.idea/prettier.xml
+!/.idea/jsLinters/eslint.xml
+!/.idea/sqldialects.xml
+!/.idea/dataSources.xml
+!/.idea/vcs.xml
+!/.idea/scopes/
+!/.idea/encodings.xml
+!/.idea/IntelliLang.xml

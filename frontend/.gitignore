@@ -1,0 +1,11 @@
+.DS_Store
+*.local
+dist
+dist-ssr
+node_modules
+**/_*
+.nuxt
+src/server/middleware/@proxy/proxy.ts
+.output
+tsconfig.tsbuildinfo
+.unlighthouse

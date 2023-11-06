@@ -1,0 +1,241 @@
+###########
+# General #
+###########
+server:
+  port: 8080
+
+spring:
+  application:
+    name: "Hangar Backend"
+  ############
+  # DataBase #
+  ############
+  sql:
+    init:
+      platform: postgres
+  datasource:
+    url: jdbc:postgresql://localhost:5432/hangar
+    username: hangar
+    password: hangar
+  security:
+    filter:
+      order: 1000
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+  devtools:
+    restart:
+      additional-exclude: work/**
+      quiet-period: 900
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+    date-format: com.fasterxml.jackson.databind.util.StdDateFormat
+
+  cloud:
+    aws:
+      s3:
+        endpoint: "${hangar.storage.object-storage-endpoint}"
+    kubernetes:
+      secrets:
+        enableApi: true
+
+  graphql:
+    graphiql:
+      enabled: true
+
+springdoc:
+  pathsToMatch: "/api/v1/**"
+
+management:
+  tracing:
+    enabled: false # set this to true if you have zipkin running locally
+    sampling:
+      probability: 1.0
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+        include: "*"
+
+hangar:
+  dev: true
+  base-url: "http://localhost:3333"
+  ga-code: "UA-38006759-9"
+  allow-indexing: true
+  disable-jgroups: true
+  disable-ratelimiting: false
+
+  licenses:
+    - "Unspecified"
+    - "MIT"
+    - "Apache 2.0"
+    - "GPL"
+    - "LGPL"
+    - "AGPL"
+    - "Other"
+
+  announcements:
+    - text: |
+        This is a local server for testing purposes. There is a public staging instance at <a href="https://hangar.papermc.dev" style="text-decoration: underline">https://hangar.papermc.dev</a> and the production site can be found at <a href="https://hangar.papermc.io" style="text-decoration: underline">https://hangar.papermc.io</a>.
+      color: "#2f4476"
+
+  sponsors:
+    - name: Beer
+      image: /images/sponsors/beer.jpg
+      link: https://benndorf.dev
+    - name: MiniDigger
+      image: /images/sponsors/minidigger.png
+      link: https://benndorf.dev
+
+  update-tasks:
+    homepage: 2m
+    version-downloads: 2m
+    project-views: 10m
+
+  channels:
+    max-name-len: 15
+    min-name-len: 1
+    max-description-len: 50
+    name-regex: "^[a-zA-Z0-9]+$"
+    color-default: cyan
+    name-default: "Release"
+    description-default: "The default channel"
+
+  pages:
+    home:
+      name: "Resource Page"
+      message: "Welcome to your new project!"
+    min-len: 15
+    max-len: 75000
+    name-regex: "^[a-zA-Z0-9-_ ]+$"
+    max-name-len: 25
+    min-name-len: 3
+
+  projects:
+    max-name-len: 28
+    max-version-name-len: 30
+    max-license-name-len: 15
+    max-dependencies: 100
+    max-pages: 50
+    max-bbcode-len: 40000
+    max-sponsors-len: 1500
+    max-channels: 5
+    init-load: 25
+    init-version-load: 10
+    max-desc-len: 120
+    max-file-size: 10000000
+    content-max-len: 1000000
+    file-validate: true
+    stale-age: 28d
+    check-interval: 1h
+    draft-expire: 1d
+    user-grid-page-size: 30
+    max-keywords: 5
+    unsafe-download-max-age: 10
+    show-unreviewed-download-warning: false
+    name-regex: "^[a-zA-Z0-9-_]{3,}$"
+    version-name-regex: "^[a-zA-Z0-9-_.+]+$"
+    license-name-regex: "^[a-zA-Z0-9-_.() +]*$"
+
+  orgs:
+    create-limit: 5
+    dummy-email-domain: "org.papermc.io"
+    enabled: true
+    max-name-len: 20
+
+  users:
+    max-tagline-len: 100
+    staff-roles:
+      - Hangar_Admin
+      - Hangar_Mod
+      - Hangar_Dev
+    name-change-interval: 30
+    name-change-history: 90
+    max-name-len: 20
+    name-regex: "^[a-zA-Z0-9-_]{3,}$"
+
+  security:
+    secure: false
+    unsafe-download-max-age: 600000
+    token-issuer: "Hangar"
+    token-secret: "secret!"
+    token-expiry: 300 # seconds
+    refresh-token-expiry: 30 # days
+    rp-name: "Hangar"
+    rp-id: "localhost"
+    safe-download-hosts:
+      - "github.com"
+      - "githubusercontent.com"
+      - "gitlab.com"
+      - "youtu.be"
+      - "youtube.com"
+      - "papermc.io"
+      - "papermc.dev"
+      - "discord.gg"
+      - "markdownguide.org"
+      - "spongepowered.org"
+      - "bugs.mojang.com"
+      - "patreon.com"
+      - "ko-fi.com"
+      - "crowdin.com"
+      - "kyori.net"
+      - "modrinth.com"
+      - "i.imgur.com"
+      - "imgur.com"
+      - "giphy.com"
+      - "media.giphy.com"
+      - "bstats.org"
+
+  jobs:
+    check-interval: 5s
+    unknown-error-timeout: 15m
+    status-error-timeout: 5m
+    not-available-timeout: 2m
+    max-concurrent-jobs: 32
+
+  storage:
+    # type: "object"
+    access-key: "hangar_root"
+    secret-key: "hangar_pass"
+    bucket: "hangar"
+    object-storage-endpoint: "http://127.0.0.1:9000"
+    cdn-endpoint: "http://127.0.0.1:9000"
+    cdn-include-bucket: true
+
+  cors:
+    allowed-hosts:
+      - api.spigotmc.org
+
+  image:
+    quality: 0.35
+    size: 256
+
+  mail:
+    from: Hangar <noreply@mail.papermc.dev>
+    user: dum
+    pass: dum
+    host: localhost
+    port: 1025
+    dev: true
+
+#################
+# Debug Logging #
+#################
+logging:
+  level:
+    root: INFO
+    org.springframework: INFO
+    org.springframework.context.support.PostProcessorRegistrationDelegate: WARN
+    io.papermc.hangar.service.internal.JobService: DEBUG
+    io.papermc.hangar.config.WebConfig.LoggingInterceptor: DEBUG
+    io.papermc.hangar.service.ReplicationService: DEBUG
+    # graphql: TRACE
+    # org.springframework.cache: TRACE
+    # org.springframework.beans: TRACE
+    # io.papermc.hangar.security: TRACE
+    # org.springframework.security: TRACE
+    # com.webauthn4j: TRACE
+    # org.postgresql: TRACE
+    # com.sun.mail: TRACE

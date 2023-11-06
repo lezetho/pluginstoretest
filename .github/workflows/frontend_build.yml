@@ -1,0 +1,77 @@
+name: Build Frontend
+
+on:
+  # allow manual dispatch
+  workflow_dispatch:
+  # run on PRs
+  pull_request:
+    paths:
+      - 'frontend/**'
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: Cache Pnpm
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install frontend deps
+        env:
+          CI: true
+        run: (cd frontend && pnpm install --frozen-lockfile)
+
+      - name: Set environment for branch
+        run: |
+          if [[ $GITHUB_REF == 'refs/heads/master' ]]; then
+              echo "BACKEND_DATA_HOST=https://hangar.papermc.io" >> $GITHUB_ENV
+          else
+              echo "BACKEND_DATA_HOST=https://hangar.papermc.dev" >> $GITHUB_ENV
+          fi
+
+      - name: Lint frontend
+        env:
+          CI: true
+          DEBUG: "hangar:*"
+        run: (cd frontend && pnpm prep && pnpm lint:eslint)
+
+      - name: Build frontend
+        env:
+          CI: true
+          # keep these in sync with compose!
+          BACKEND_HOST: "http://hangar_backend:8080"
+          PUBLIC_HOST: "https://hangar.papermc.dev"
+          BACKEND_DATA_HOST: "https://hangar.papermc.dev"
+          DEBUG: "hangar:*"
+        run: (cd frontend && pnpm build)
+
